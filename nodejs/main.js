@@ -2,7 +2,7 @@ const http = require("http");
 const fs = require("fs");
 
 const app = http.createServer((request, response) => {
-  const url = request.url;
+  let url = request.url;
 
   if (request.url == "/") {
     url = "/index.html";
