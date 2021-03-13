@@ -82,7 +82,7 @@ const app = http.createServer((request, response) => {
         title,
         list,
         `
-          <form action="http://localhost:3000/create_process" method="post">
+          <form action="/create_process" method="post">
             <p><input type="text" name="title" placeholder="title"></p>
             <p>
               <textarea name="description" placeholder="description"></textarea>
@@ -111,7 +111,55 @@ const app = http.createServer((request, response) => {
         response.writeHead(302, {
           location: `/?id=${title}`,
         });
-        response.end("success");
+        response.end();
+      });
+    });
+  } else if (pathname === "/update") {
+    fs.readdir("./data", (err, files) => {
+      const title = queryData.id;
+      const list = templateList(files);
+
+      fs.readFile(`data/${title}`, "utf8", (err, description) => {
+        const template = templateHTML(
+          title,
+          list,
+          `
+            <form action="/update_process" method="post">
+            <input type="hidden" name="id" value=${title}>
+              <p><input type="text" name="title" placeholder="title" value=${title}></p>
+              <p>
+                <textarea name="description" placeholder="description">${description}</textarea>
+              </p>
+              <p>
+                <input type="submit">
+              </p>
+            </form>
+          `,
+          `<a href="/create">create</a>
+          <a href="/update?id=${title}">update</a>`
+        );
+
+        response.writeHead(200);
+        response.end(template);
+      });
+    });
+  } else if (pathname === "/update_process") {
+    let body = "";
+    request.on("data", (data) => {
+      body += data;
+    });
+    request.on("end", () => {
+      const post = qs.parse(body);
+      const id = post.id;
+      const title = post.title;
+      const description = post.description;
+      fs.rename(`./data/${id}`, `./data/${title}`, (err) => {
+        fs.writeFile(`./data/${title}`, description, "utf8", (err) => {
+          response.writeHead(302, {
+            location: `/?id=${title}`,
+          });
+          response.end();
+        });
       });
     });
   } else {
