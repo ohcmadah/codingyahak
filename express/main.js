@@ -1,3 +1,13 @@
+const express = require("express");
+const app = express();
+
+const port = 3000;
+
+app.get("/", (req, res) => res.end("Hello World!"));
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+/*
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
@@ -141,3 +151,4 @@ var app = http.createServer(function(request,response){
     }
 });
 app.listen(3000);
+*/
