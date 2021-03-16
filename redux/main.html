@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.js"></script>
     <title>Document</title>
   </head>
   <body>
@@ -23,14 +24,15 @@
       }
 
       function TOC() {
-        document.querySelector("#toc").innerHTML = `
-          <nav>
-            <ol>
-              <li><a href="1.html">HTML</a></li>
-              <li><a href="2.html">CSS</a></li>
-            </ol>
-          </nav>
-        `;
+        const state = store.getState();
+        let liTags = "";
+        for (let i = 0; i < state.contents.length; i++) {
+          const content = state.contents[i];
+          liTags += `<li>
+            <a href="${content.id}">${content.title}</a>
+          </li>`;
+        }
+        document.querySelector("#toc").innerHTML = liTags;
       }
 
       function control() {
@@ -50,6 +52,25 @@
           </article>
         `;
       }
+
+      function reducer(state, action) {
+        if (state === undefined) {
+          return {
+            contents: [
+              { id: 1, title: "HTML", desc: "HTML is ..." },
+              { id: 2, title: "CSS", desc: "CSS is ..." },
+            ],
+          };
+        }
+        let newState;
+        return newState;
+      }
+
+      const store = Redux.createStore(
+        reducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
 
       subject();
       TOC();
