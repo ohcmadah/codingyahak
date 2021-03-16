@@ -29,7 +29,13 @@
         for (let i = 0; i < state.contents.length; i++) {
           const content = state.contents[i];
           liTags += `<li>
-            <a href="${content.id}">${content.title}</a>
+            <a onclick="
+              event.preventDefault();
+              const action = {type: 'SELECT', id: ${content.id}};
+              store.dispatch(action);
+            " href="${content.id}">
+              ${content.title}
+            </a>
           </li>`;
         }
         document.querySelector("#toc").innerHTML = liTags;
@@ -56,13 +62,19 @@
       function reducer(state, action) {
         if (state === undefined) {
           return {
+            selected_id: null,
             contents: [
               { id: 1, title: "HTML", desc: "HTML is ..." },
               { id: 2, title: "CSS", desc: "CSS is ..." },
             ],
           };
         }
-        let newState;
+
+        let newState = {};
+        if (action.type === "SELECT") {
+          Object.assign(newState, state, { selected_id: action.id });
+        }
+
         return newState;
       }
 
