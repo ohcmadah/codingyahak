@@ -1,6 +1,8 @@
 import DisplayNumber from "../components/DisplayNumber";
-import store from "../store";
+import { connect } from "react-redux";
+export default connect()(DisplayNumber);
 
+/*
 import React, { Component } from "react";
 
 export default class _ extends Component {
@@ -18,3 +20,4 @@ export default class _ extends Component {
     return <DisplayNumber number={this.state.number} />;
   }
 }
+*/
