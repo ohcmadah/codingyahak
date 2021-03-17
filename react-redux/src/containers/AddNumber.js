@@ -1,6 +1,17 @@
 import AddNumber from "../components/AddNumber";
 import { connect } from "react-redux";
-export default connect()(AddNumber);
+function mapReduxStateToReactProps(state) {
+  return {
+    number: state.number,
+  };
+}
+function mapReduxDispatchToReactProps() {
+  return {};
+}
+export default connect(
+  mapReduxStateToReactProps,
+  mapReduxDispatchToReactProps
+)(AddNumber);
 
 /*
 import React, { Component } from "react";
