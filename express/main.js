@@ -1,9 +1,24 @@
 const express = require("express");
 const app = express();
+const fs = require("fs");
+const template = require("./lib/template.js");
 
-const port = 3000;
+const port = 5000;
 
-app.get("/", (req, res) => res.end("Hello World!"));
+app.get("/", (request, response) => {
+  fs.readdir("./data", function (error, filelist) {
+    var title = "Welcome";
+    var description = "Hello, Node.js";
+    var list = template.list(filelist);
+    var html = template.HTML(
+      title,
+      list,
+      `<h2>${title}</h2>${description}`,
+      `<a href="/create">create</a>`
+    );
+    response.send(html);
+  });
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
