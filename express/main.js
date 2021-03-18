@@ -1,15 +1,16 @@
 const express = require("express");
-const app = express();
 const fs = require("fs");
 const template = require("./lib/template.js");
 const path = require("path");
 const sanitizeHtml = require("sanitize-html");
-const qs = require("querystring");
 const bodyParser = require("body-parser");
+const compression = require("compression");
 
+const app = express();
 const port = 5000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(compression());
 
 app.get("/", (request, response) => {
   fs.readdir("./data", function (error, filelist) {
