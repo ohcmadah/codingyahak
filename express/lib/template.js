@@ -23,7 +23,7 @@ module.exports = {
       list =
         list +
         `
-        <li><a href="/page/${filelist[i]}">${filelist[i]}</a></li>`;
+        <li><a href="/topic/${filelist[i]}">${filelist[i]}</a></li>`;
       i = i + 1;
     }
     list = list + "</ul>";
