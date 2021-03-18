@@ -9,6 +9,7 @@ const compression = require("compression");
 const app = express();
 const port = 5000;
 
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
 app.get("*", (req, res, next) => {
@@ -25,7 +26,8 @@ app.get("/", (req, res) => {
   const html = template.HTML(
     title,
     list,
-    `<h2>${title}</h2>${description}`,
+    `<h2>${title}</h2>${description}
+     <img src="images/hello.jpg" style="width: 300px; display: block; margin-top: 10px" alt="hello" />`,
     `<a href="/create">create</a>`
   );
   res.send(html);
