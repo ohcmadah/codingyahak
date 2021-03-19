@@ -5,11 +5,29 @@ var qs = require("querystring");
 var template = require("./lib/template.js");
 var path = require("path");
 var sanitizeHtml = require("sanitize-html");
+const cookie = require("cookie");
+
+function authIsOwner(req, res) {
+  let isOwner = false;
+  let cookies = {};
+
+  if (request.headers.cookie) {
+    cookies = cookie.parse(request.headers.cookie);
+  }
+
+  if (cookies.email === "1234@1234" && cookies.password === "1111") {
+    isOwner = true;
+  }
+
+  return isOwner;
+}
 
 var app = http.createServer(function (request, response) {
   var _url = request.url;
   var queryData = url.parse(_url, true).query;
   var pathname = url.parse(_url, true).pathname;
+  const isOwner = authIsOwner(req, res);
+
   if (pathname === "/") {
     if (queryData.id === undefined) {
       fs.readdir("./data", function (error, filelist) {
