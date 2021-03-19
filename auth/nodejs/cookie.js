@@ -14,6 +14,8 @@ const app = http.createServer((req, res) => {
       `Parmanent=cookies; Max-Age=${60 * 60 * 24 * 30}`,
       "Secure=Secure; Secure",
       "HttpOnly=HttpOnly; HttpOnly",
+      "Path=Path; Path=/cookie",
+      "Domain=Domain; Domain=o2.org",
     ],
   });
 
