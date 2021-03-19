@@ -11,8 +11,8 @@ function authIsOwner(req, res) {
   let isOwner = false;
   let cookies = {};
 
-  if (request.headers.cookie) {
-    cookies = cookie.parse(request.headers.cookie);
+  if (req.headers.cookie) {
+    cookies = cookie.parse(req.headers.cookie);
   }
 
   if (cookies.email === "1234@1234" && cookies.password === "1111") {
@@ -22,11 +22,19 @@ function authIsOwner(req, res) {
   return isOwner;
 }
 
+function authStatusUI(request, response) {
+  let authStatusUI = "<a href='/login'>login</a>";
+  if (authIsOwner(request, response)) {
+    authStatusUI = "<a href='/logout_process'>logout</a>";
+  }
+
+  return authStatusUI;
+}
+
 var app = http.createServer(function (request, response) {
   var _url = request.url;
   var queryData = url.parse(_url, true).query;
   var pathname = url.parse(_url, true).pathname;
-  const isOwner = authIsOwner(req, res);
 
   if (pathname === "/") {
     if (queryData.id === undefined) {
@@ -38,7 +46,8 @@ var app = http.createServer(function (request, response) {
           title,
           list,
           `<h2>${title}</h2>${description}`,
-          `<a href="/create">create</a>`
+          `<a href="/create">create</a>`,
+          authStatusUI(request, response)
         );
         response.writeHead(200);
         response.end(html);
@@ -62,7 +71,8 @@ var app = http.createServer(function (request, response) {
                 <form action="delete_process" method="post">
                   <input type="hidden" name="id" value="${sanitizedTitle}">
                   <input type="submit" value="delete">
-                </form>`
+                </form>`,
+            authStatusUI(request, response)
           );
           response.writeHead(200);
           response.end(html);
@@ -87,7 +97,8 @@ var app = http.createServer(function (request, response) {
             </p>
           </form>
         `,
-        ""
+        "",
+        authStatusUI(request, response)
       );
       response.writeHead(200);
       response.end(html);
@@ -127,7 +138,8 @@ var app = http.createServer(function (request, response) {
               </p>
             </form>
             `,
-          `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`
+          `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`,
+          authStatusUI(request, response)
         );
         response.writeHead(200);
         response.end(html);
@@ -176,7 +188,8 @@ var app = http.createServer(function (request, response) {
           <p><input type="password" name="password" placeholder="password"></p> 
           <p><input type="submit" ></p> 
         </form> `,
-        `<a href="/create">create</a>`
+        `<a href="/create">create</a>`,
+        authStatusUI(request, response)
       );
       response.writeHead(200);
       response.end(html);
@@ -201,6 +214,19 @@ var app = http.createServer(function (request, response) {
       } else {
         response.end("Who?");
       }
+      response.end();
+    });
+  } else if (pathname === "/logout_process") {
+    request.on("data", function (data) {});
+    request.on("end", function () {
+      response.writeHead(302, {
+        "Set-Cookie": [
+          `email=; Max-Age=0`,
+          `password=; Max-Age=0`,
+          `nickname=; Max-Age=0`,
+        ],
+        Location: `/`,
+      });
       response.end();
     });
   } else {
