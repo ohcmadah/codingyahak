@@ -48,6 +48,12 @@ router.post("/login", (req, res) => {
   }
 });
 
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    res.redirect("/");
+  });
+});
+
 /*
 router.get("/create", (req, res) => {
   const title = "WEB - create";
