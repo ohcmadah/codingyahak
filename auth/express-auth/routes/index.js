@@ -3,6 +3,7 @@ const router = express.Router();
 const template = require("../lib/template.js");
 
 router.get("/", (req, res) => {
+  console.log(req.session);
   const title = "Welcome";
   const description = "Hello, Node.js";
   const list = template.list(req.list);
