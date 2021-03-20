@@ -3,8 +3,10 @@ const fs = require("fs");
 const bodyParser = require("body-parser");
 const compression = require("compression");
 const helmet = require("helmet");
+
 const topicRouter = require("./routes/topic");
 const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 
 const app = express();
 const port = 5000;
@@ -20,8 +22,9 @@ app.get("*", (req, res, next) => {
   });
 });
 
-app.use("/topic", topicRouter);
 app.use("/", indexRouter);
+app.use("/topic", topicRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res, next) => {
   res.status(404).send("Sorry cant find that!");
