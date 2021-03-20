@@ -1,22 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const template = require("../lib/template.js");
-
-function authIsOwner(req, res) {
-  if (req.session.is_logined) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function authStatusUI(req, res) {
-  let authStatusUI = '<a href="/auth/login">login</a>';
-  if (authIsOwner(req, res)) {
-    authStatusUI = `${req.session.nickname} | <a href="/auth/logout">logout</a>`;
-  }
-  return authStatusUI;
-}
+const auth = require("../lib/auth");
 
 router.get("/", (req, res) => {
   const title = "Welcome";
@@ -28,7 +13,7 @@ router.get("/", (req, res) => {
     `<h2>${title}</h2>${description}
        <img src="images/hello.jpg" style="width: 300px; display: block; margin-top: 10px" alt="hello" />`,
     `<a href="/topic/create">create</a>`,
-    authStatusUI(req, res)
+    auth.statusUI(req, res)
   );
   res.send(html);
 });
