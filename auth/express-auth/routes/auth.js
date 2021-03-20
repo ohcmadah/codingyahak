@@ -5,6 +5,12 @@ const sanitizeHtml = require("sanitize-html");
 const fs = require("fs");
 const template = require("../lib/template.js");
 
+const authData = {
+  email: "1234@1234",
+  password: "1111",
+  nickname: "hadam",
+};
+
 router.get("/login", (req, res) => {
   const title = "WEB - login";
   const list = template.list(req.list);
@@ -25,6 +31,17 @@ router.get("/login", (req, res) => {
     ""
   );
   res.send(html);
+});
+
+router.post("/login", (req, res) => {
+  const post = req.body;
+  const email = post.email;
+  const password = post.pwd;
+  if (email === authData.email && password === authData.password) {
+    res.send("Welcome!");
+  } else {
+    res.send("Who?");
+  }
 });
 
 /*
