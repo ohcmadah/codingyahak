@@ -25,6 +25,10 @@ app.use(
     store: new FileStore(),
   })
 );
+
+const passport = require("passport"),
+  LocalStrategy = require("passport-local").Strategy;
+
 app.get("*", (req, res, next) => {
   fs.readdir("./data", (err, fileList) => {
     req.list = fileList;
