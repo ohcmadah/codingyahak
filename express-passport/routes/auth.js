@@ -33,6 +33,7 @@ router.get("/login", (req, res) => {
   res.send(html);
 });
 
+/*
 router.post("/login", (req, res) => {
   const post = req.body;
   const email = post.email;
@@ -47,6 +48,7 @@ router.post("/login", (req, res) => {
     res.send("Who?");
   }
 });
+*/
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
