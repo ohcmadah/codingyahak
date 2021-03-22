@@ -1,15 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
-const sanitizeHtml = require("sanitize-html");
-const fs = require("fs");
 const template = require("../lib/template.js");
-
-const authData = {
-  email: "1234@1234",
-  password: "1111",
-  nickname: "hadam",
-};
 
 router.get("/login", (req, res) => {
   const title = "WEB - login";
