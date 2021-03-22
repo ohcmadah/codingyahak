@@ -35,6 +35,20 @@ const authData = {
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function (user, done) {
+  done(null, user.email);
+});
+
+passport.deserializeUser(function (id, done) {
+  done(null, authData);
+  // User.findById(id, function (err, user) {
+  //   done(err, user);
+  // });
+});
+
 passport.use(
   new LocalStrategy(
     {
@@ -58,10 +72,12 @@ passport.use(
 
 app.post(
   "/auth/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/auth/login",
-  })
+  passport.authenticate("local", { failureRedirect: "/auth/login" }),
+  (req, res) => {
+    req.session.save(() => {
+      res.redirect("/");
+    });
+  }
 );
 
 app.get("*", (req, res, next) => {
