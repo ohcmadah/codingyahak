@@ -5,6 +5,7 @@ const compression = require("compression");
 const helmet = require("helmet");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
+const flash = require("connect-flash");
 
 const topicRouter = require("./routes/topic");
 const indexRouter = require("./routes/index");
@@ -25,6 +26,20 @@ app.use(
     store: new FileStore(),
   })
 );
+app.use(flash());
+
+app.get("/flash", (req, res) => {
+  // Set a flash message by passing the key, followed by the value, to req.flash().
+  req.flash("info", "Flash is back!");
+  res.send("flash");
+});
+
+app.get("/flash-display", (req, res) => {
+  // Get an array of flash messages by passing the key to req.flash()
+  const fmsg = req.flash();
+  console.log(fmsg);
+  res.send(fmsg);
+});
 
 const authData = {
   email: "1234@1234",
@@ -72,7 +87,10 @@ passport.use(
 
 app.post(
   "/auth/login",
-  passport.authenticate("local", { failureRedirect: "/auth/login" }),
+  passport.authenticate("local", {
+    failureRedirect: "/auth/login",
+    failureFlash: true,
+  }),
   (req, res) => {
     req.session.save(() => {
       res.redirect("/");
